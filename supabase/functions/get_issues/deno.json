@@ -1,3 +1,7 @@
 {
-  "imports": {}
+  "importMap": "./import_map.json",
+  "permissions": {
+    "env": ["API_KEY", "GITHUB_PAT"],
+    "net": ["api.github.com"]
+  }
 }

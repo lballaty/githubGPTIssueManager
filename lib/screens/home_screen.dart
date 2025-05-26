@@ -26,7 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     try {
-      final service = GitHubService(_tokenController.text.trim());
+      final service = GitHubService("https://juqlmvsnlpunbbluigdp.functions.supabase.co/get_issues
+");
+
       final issues = await service.fetchIssues(
         _ownerController.text.trim(),
         _repoController.text.trim(),
@@ -53,13 +55,13 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
-            TextField(
-              controller: _tokenController,
-              decoration: const InputDecoration(
-                labelText: 'GitHub Personal Access Token',
-              ),
-              obscureText: true,
-            ),
+// Remove this:
+// TextField(
+//   controller: _tokenController,
+//   decoration: InputDecoration(...),
+//   obscureText: true,
+// ),
+
             const SizedBox(height: 8),
             TextField(
               controller: _ownerController,
@@ -88,3 +90,4 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+

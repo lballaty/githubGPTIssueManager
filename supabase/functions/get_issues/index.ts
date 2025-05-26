@@ -1,6 +1,13 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 serve(async (req) => {
+  const expectedKey = Deno.env.get("API_KEY");
+  const receivedKey = req.headers.get("x-api-key");
+
+  if (receivedKey !== expectedKey) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
   const token = Deno.env.get("GITHUB_PAT");
 
   const url = new URL(req.url);

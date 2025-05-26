@@ -3,17 +3,18 @@ import 'package:http/http.dart' as http;
 import '../models/issue_model.dart';
 
 class GitHubService {
-  final String token;
+  final String supabaseUrl;
 
-  GitHubService(this.token);
+  GitHubService(this.supabaseUrl);
 
   Future<List<GitHubIssue>> fetchIssues(String owner, String repo) async {
-    final url = Uri.https('api.github.com', '/repos/$owner/$repo/issues');
+    final uri = Uri.parse('$supabaseUrl/get_issues?owner=$owner&repo=$repo');
     final response = await http.get(
-      url,
+      uri,
       headers: {
-        'Authorization': 'token $token',
-        'Accept': 'application/vnd.github+json',
+        'Accept': 'application/json',
+        // Optionally add:
+        'x-api-key': '6gith8ubgp5_access_92f3!', // match what you set in Supabase
       },
     );
 
@@ -21,7 +22,7 @@ class GitHubService {
       final List<dynamic> data = jsonDecode(response.body);
       return data.map((item) => GitHubIssue.fromJson(item)).toList();
     } else {
-      throw Exception('Failed to fetch issues: ${response.statusCode}');
+      throw Exception('Failed to load issues: ${response.statusCode}');
     }
   }
 }
