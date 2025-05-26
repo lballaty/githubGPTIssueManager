@@ -1,7 +1,7 @@
+// lib/screens/home_screen.dart
 import 'package:flutter/material.dart';
 import '../services/github_service.dart';
-import '../models/issue_model.dart';
-import '../widgets/issue_list.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,12 +11,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final TextEditingController _tokenController = TextEditingController();
   final TextEditingController _ownerController = TextEditingController();
   final TextEditingController _repoController = TextEditingController();
 
   GitHubService? _service;
-  List<GitHubIssue> _issues = [];
+  List<Map<String, dynamic>> _issues = [];
   String? _error;
 
   Future<void> _loadIssues() async {
@@ -26,12 +25,14 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     try {
-      final service = GitHubService("https://juqlmvsnlpunbbluigdp.functions.supabase.co/get_issues
-");
+      final service = GitHubService(
+        "https://juqlmvsnlpunbbluigdp.functions.supabase.co",
+        "githubgpt_access_92f3!",
+      );
 
       final issues = await service.fetchIssues(
-        _ownerController.text.trim(),
-        _repoController.text.trim(),
+        owner: _ownerController.text.trim(),
+        repo: _repoController.text.trim(),
       );
 
       setState(() {
@@ -55,14 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
-// Remove this:
-// TextField(
-//   controller: _tokenController,
-//   decoration: InputDecoration(...),
-//   obscureText: true,
-// ),
-
-            const SizedBox(height: 8),
             TextField(
               controller: _ownerController,
               decoration: const InputDecoration(labelText: 'Repo Owner (e.g., torvalds)'),
@@ -83,11 +76,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 _error!,
                 style: const TextStyle(color: Colors.red),
               ),
-            IssueList(issues: _issues),
+            ..._issues.map((issue) => ListTile(
+                  title: Text(issue['title'] ?? 'No title'),
+                  subtitle: Text('State: ${issue['state']}'),
+                )),
           ],
         ),
       ),
     );
   }
 }
-
