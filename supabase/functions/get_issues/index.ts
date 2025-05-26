@@ -1,11 +1,17 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+//import { serve } from "serve";
+
 
 serve(async (req) => {
   const expectedKey = Deno.env.get("API_KEY");
   const receivedKey = req.headers.get("x-api-key");
 
+  // 🔍 Log both values to Supabase logs for debugging
+    console.log("Expected key:", expectedKey);
+    console.log("Received key:", receivedKey);
+
   if (receivedKey !== expectedKey) {
-    return new Response("Unauthorized", { status: 401 });
+    return new Response(`App Key Unauthorized\nExpected: ${expectedKey}\nReceived: ${receivedKey}`, { status: 401 });
   }
 
   const token = Deno.env.get("GITHUB_PAT");

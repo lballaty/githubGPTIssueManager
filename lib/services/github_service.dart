@@ -14,7 +14,7 @@ class GitHubService {
       headers: {
         'Accept': 'application/json',
         // Optionally add:
-        'x-api-key': '6gith8ubgp5_access_92f3!', // match what you set in Supabase
+        'x-api-key': 'githubgpt_access_92f3!%', // match what you set in Supabase
       },
     );
 
